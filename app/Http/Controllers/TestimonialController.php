@@ -55,7 +55,7 @@ class TestimonialController extends Controller
         $testimonial->save();
 
         $response['status']=200;
-        $response['message']= 'Gender added successfully';  
+        $response['message']= 'Testimonial was added successfully';  
         }
         return response()->json($response);
       

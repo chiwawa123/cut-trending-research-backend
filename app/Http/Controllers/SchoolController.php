@@ -43,5 +43,14 @@ WHERE
     return response()->json($query);
     }
 
+
+	
+    public function schoolView()
+    {
+        $getSchools = School::all();
+
+        return response()->json($getSchools, 200);
+    }
+
    
 }

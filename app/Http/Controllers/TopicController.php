@@ -20,7 +20,6 @@ class TopicController extends Controller
         tbl_topic.topic_category_id, 
         tbl_topic.description, 
         tbl_topic.is_active, 
-        tbl_topic.slider, 
         tbl_topic.date_posted
     FROM
     tbl_topic
@@ -57,8 +56,6 @@ class TopicController extends Controller
             'description' => 'required',
             'date_posted' => 'required',
             'is_active' => 'required',
-            'slider' => 'required',
-            'position' => 'required',
             'image' => 'required',
         ]);
         if ($validator->fails()) {
@@ -71,9 +68,7 @@ class TopicController extends Controller
             $topic->description = $request['description'];
             $topic->date_posted = $request['date_posted'];
             $topic->topic_category_id = $request['topic_category_id'];
-            $topic->position = $request['position'];
             $topic->is_active = $request['is_active'];
-            $topic->slider = $request['slider'];
 
             $fileName = time() . '.' . $request->image->extension();
             $request->image->storeAs('public/images', $fileName);
@@ -95,7 +90,6 @@ class TopicController extends Controller
             'image' => 'required',
             'date_posted' => 'required|date|before_or_equal:now',
             'topic_category_id' => 'required',
-            'position' => 'required',
         ]);
 
         $topic_id = $request['topic_id'];
@@ -119,9 +113,7 @@ class TopicController extends Controller
         $getTopic->topic_name = $request['topic_name'];
         $getTopic->date_posted = $request['date_posted'];
         $getTopic->topic_category_id = $request['topic_category_id'];
-        $getTopic->position = $request['position'];
         $getTopic->is_active = $request['is_active'];
-        $getTopic->slider = $request['slider'];
         $getTopic->image = $fileName;
 
 

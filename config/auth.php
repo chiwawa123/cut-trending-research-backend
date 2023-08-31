@@ -36,14 +36,16 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
         'api' => [
             'driver' => 'jwt',
             'provider' => 'users',
         ],
+        'api-student' => [
+            'driver' => 'passport',
+            'provider' => 'students',
+        ],
+
+
     ],
 
     /*
@@ -69,10 +71,10 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'students' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\studentLogin::class,
+        ],
     ],
 
     /*

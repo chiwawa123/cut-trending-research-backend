@@ -12,6 +12,7 @@ class Review extends Model
         'dis_liked',
         'is_liked',
         'topic_id',
+        'student_id',
         
     ];
 

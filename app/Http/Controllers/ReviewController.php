@@ -12,18 +12,25 @@ class ReviewController extends Controller
     public function addReview(Request $request)
     {
 
-        $review =  new Review([
-            'is_liked' => $request['is_liked'],
-            'dis_liked' => $request['dis_liked'],
-            'topic_id' => $request['topic_id']
-        ]);
-        $review->save();
+        $topic_id = $request['topic_id'];
+        $student_id = $request['student_id'];
 
-        if ($review->save()) {
-            return response()->json(200);
+        $reviewTopic = Review::join('tblstudent', 'tblstudent.student_id', '=', 'tbl_reviews.student_id')
+            ->where('tblstudent.student_id', $student_id)
+            ->where('tbl_reviews.topic_id',  $topic_id)
+            ->first();
+
+        if ($reviewTopic) {
+            $reviewTopic->delete();
         } else {
-            return response()->json(['message' => 'Ooops Something went wrong'], 200);
+            $review =  new Review();
+            $review->student_id = $request['student_id'];
+            $review->topic_id=$request['topic_id'];
+            $review->is_liked=$request['is_liked'];
+
+            $review->save();
         }
+        return response()->json(['message'=>'review added successfully','status'=>200]);
     }
 
     public function viewReview()
@@ -44,11 +51,12 @@ class ReviewController extends Controller
     }
 
     public function likedDisliked(Request $request)
-    {   
-        $topic_id= $request['topic_id'];
+    {
+        $topic_id = $request['topic_id'];
 
-        $liked = Review::where('tbl_reviews.is_liked',1)->where('tbl_reviews.topic_id',$topic_id)
-        ->join('tbl_topic', 'tbl_topic.topic_id', '=', 'tbl_reviews.topic_id')
+
+        $liked = Review::where('tbl_reviews.is_liked', 1)->where('tbl_reviews.topic_id', $topic_id)
+            ->join('tbl_topic', 'tbl_topic.topic_id', '=', 'tbl_reviews.topic_id')
             ->select('tbl_topic.topic_id,
                         tbl_topic.topic_name,
                         tbl_topic.topic_category_id,
@@ -61,8 +69,8 @@ class ReviewController extends Controller
                         tbl_reviews.review_id ')
             ->count();
 
-        $dis_liked = Review::where('tbl_reviews.dis_liked', 1)->where('tbl_reviews.topic_id',$topic_id)
-        ->join('tbl_topic', 'tbl_topic.topic_id', '=', 'tbl_reviews.topic_id')
+        $dis_liked = Review::where('tbl_reviews.dis_liked', 1)->where('tbl_reviews.topic_id', $topic_id)
+            ->join('tbl_topic', 'tbl_topic.topic_id', '=', 'tbl_reviews.topic_id')
             ->select('tbl_topic.topic_id,
                         tbl_topic.topic_name,
                         tbl_topic.topic_category_id,
@@ -78,6 +86,4 @@ class ReviewController extends Controller
 
         return response()->json(['liked' => $liked, 'disliked' => $dis_liked]);
     }
-
-    
 }

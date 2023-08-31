@@ -5,6 +5,7 @@ use App\Http\Controllers\GenderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\studentAuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TopicCategoryController;
@@ -26,12 +27,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::group([
 
-    'middleware' => 'api'
+    'middleware' => 'auth:api'
 
 ], function ($router) {
 
-    Route::post('login', [AuthController::class, 'login']);
     
+   
     Route::post('signup', [AuthController::class, 'signup']);
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
@@ -43,14 +44,13 @@ Route::group([
 
     Route::get('viewTopics', [TopicController::class, 'viewTopics']);
     Route::post('deleteTopic', [TopicController::class, 'deleteTopic']);
-    Route::post('addTopic', [TopicController::class, 'addTopic']);
-    Route::post('updateTopic', [TopicController::class, 'updateTopic']);
-    Route::get('topicSlider', [TopicController::class, 'topicSlider']);
-    Route::post('topicTestimonial',[TopicController::class,'topicTestimonial']);
+ 
+  
+
 
     ////////////////////////////// School /////////////////////////////////////////////////
     Route::get('viewSchool', [SchoolController::class, 'viewSchool']);
-    Route::post('schoolData', [SchoolController::class,'getSchoolTopic']);
+
 
     
 
@@ -81,20 +81,44 @@ Route::group([
 
     ////////////////////////////////// Student ///////////////////////////////////////////////
 
-    Route::post('addStudent', [StudentController::class, 'addStudent']);
+
     Route::post('deleteStudent',[StudentController::class,'deleteStudent']);
     Route::get('viewStudents', [StudentController::class, 'viewStudents']);
-    Route::post('updateStudent', [StudentController::class, 'updateStudent']);
+
 
 
     ////////////////////////////////////////// Reviews ////////////////////////////////////////
 
-    Route::post('addReview',[ReviewController::class, 'addReview']);
+
     Route::get('viewReview',[ReviewController::class, 'viewReview']);
-    Route::post('review',[ReviewController::class,'likedDisliked']);
+
 
 
     //////////////////////////////////////// Dashboard Data ///////////////////////////////////
     Route::get('dashData',[HomeController::class,'DashboardData']);
 
 });
+Route::post('loginStudent', [studentAuthController::class, 'login']);
+
+
+
+Route::post('login', [AuthController::class, 'login']);
+
+
+Route::middleware(
+    'auth:api-student')->group( function(){
+        Route::post('addReview',[ReviewController::class, 'addReview']);
+    });
+
+Route::get('topicSlider', [TopicController::class, 'topicSlider']);
+Route::post('topicTestimonial',[TopicController::class,'topicTestimonial']);
+Route::post('review',[ReviewController::class,'likedDisliked']);
+Route::get('schoolView', [SchoolController::class, 'schoolView']);
+Route::post('schoolData', [SchoolController::class,'getSchoolTopic']);
+
+Route::post('addTopic', [TopicController::class, 'addTopic']);
+Route::post('updateTopic', [TopicController::class, 'updateTopic']);
+
+Route::post('addStudent', [StudentController::class, 'addStudent']);
+Route::post('updateStudent', [StudentController::class, 'updateStudent']);
+Route::post('checkReview',[ReviewController::class,'checkReview']);
