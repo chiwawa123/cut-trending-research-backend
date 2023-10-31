@@ -16,6 +16,6 @@ class Student extends Model
     ];
 
     protected $primaryKey='student_id';
-    protected $table = 'tbl_student';
+    protected $table = 'tblstudent_passwords';
     public $timestamps = false;
 }

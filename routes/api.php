@@ -10,8 +10,10 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TopicCategoryController;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\ViewsController;
 use App\Models\TopicCategory;
 use Illuminate\Http\Request;
+use Illuminate\Routing\ViewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,7 +35,7 @@ Route::group([
 
     
    
-    Route::post('signup', [AuthController::class, 'signup']);
+
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
@@ -56,10 +58,10 @@ Route::group([
 
     ////////////////////////////// Testimonial /////////////////////////////////////////////
     Route::get('viewTestimonial', [TestimonialController::class, 'viewTestimonials']);
-    Route::post('addTestimonial', [TestimonialController::class, 'addTestimonial']);
-    Route::post('deleteTestimonial',[TestimonialController::class,'deleteTestimonial']);
     Route::post('updateTestimonial',[TestimonialController::class,'updateTestimonial']);
+    Route::post('deleteTestimonial',[TestimonialController::class,'deleteTestimonial']);
 
+   
 
     
     
@@ -103,22 +105,40 @@ Route::post('loginStudent', [studentAuthController::class, 'login']);
 
 
 Route::post('login', [AuthController::class, 'login']);
+Route::post('signup', [AuthController::class, 'signup']);
 
 
 Route::middleware(
     'auth:api-student')->group( function(){
         Route::post('addReview',[ReviewController::class, 'addReview']);
+
     });
+    Route::post('topicTestimonial',[TopicController::class,'topicTestimonial']);
 
 Route::get('topicSlider', [TopicController::class, 'topicSlider']);
-Route::post('topicTestimonial',[TopicController::class,'topicTestimonial']);
+Route::get('studentsGet',[StudentController::class,'getStudents']);
+
 Route::post('review',[ReviewController::class,'likedDisliked']);
 Route::get('schoolView', [SchoolController::class, 'schoolView']);
 Route::post('schoolData', [SchoolController::class,'getSchoolTopic']);
-
+Route::post('show',[TopicController::class,'show']);
 Route::post('addTopic', [TopicController::class, 'addTopic']);
 Route::post('updateTopic', [TopicController::class, 'updateTopic']);
 
 Route::post('addStudent', [StudentController::class, 'addStudent']);
 Route::post('updateStudent', [StudentController::class, 'updateStudent']);
 Route::post('checkReview',[ReviewController::class,'checkReview']);
+Route::post('addTestimonial', [TestimonialController::class, 'addTestimonial']);
+Route::post('reply',[TestimonialController::class,'replyTestimonial']);
+Route::post('viewReply',[TestimonialController::class,'viewTestimonialReply']);
+Route::post('getCategory',[TopicCategoryController::class,'getTopicCategory']);
+Route::get('homeCategory',[TopicCategoryController::class,'CategoryHome']);
+Route::post('countTestimonial',[TestimonialController::class,'testimonialTopicCount']);
+Route::post('addTopicCategorySchool',[TopicController::class,'addTopicCategorySchool']);
+Route::get('topicPivot',[TopicController::class,'topicPivot']);
+Route::post('topicsInCategory',[TopicController::class,'topicsInCategory']);
+Route::post('search_topic',[TopicController::class,'searchTopic']);
+Route::post('reeadingTime', [TopicController::class,'getEstimateReadingTime']);
+Route::post('view',[ViewsController::class,'addView']);
+Route::post('countView',[ViewsController::class,'countViews']);
+Route::post('testimonialPerTopic',[TopicController::class,'getTestimonialsPerTopic']);

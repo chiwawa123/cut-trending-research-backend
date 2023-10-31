@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
+
+    public function getStudents(){
+
+        $students = Student::all();
+
+        return response()->json($students);
+    }
     public function addStudent(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -40,6 +47,7 @@ class StudentController extends Controller
         }
         return response()->json($response);
     }
+    
 
     public function viewStudents(Request $request)
     {

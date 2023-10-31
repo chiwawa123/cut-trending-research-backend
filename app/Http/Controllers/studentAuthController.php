@@ -16,8 +16,7 @@ class studentAuthController extends Controller
 
     public function login(Request $request)
     {
-        
-        $validator = $request->validate(['reg_number'=>'required|string', 'password'=>'required|string']);
+        $validator = $request->validate(['reg_number' => 'required|string', 'password' => 'required|string']);
         $regnumber = $validator['reg_number'];
         $password = $validator['password'];
 
@@ -26,24 +25,22 @@ class studentAuthController extends Controller
             ->where('tblstudent_passwords.password', $password)
             ->first();
 
-            if ($students) {
-                $token = $students->createToken('Laravel Password Grant Client')->accessToken;
-                return response()->json(
-                    [
-                        'token'=>$token,
-                        'student_id'=>$students->student_id,
-                        'first_name'=>$students->first_name,
-                        'last_name'=>$students->surname,
-                        'status'=>200,
-                        'message'=>'User Logged In Successful'
-                
-                ]);
-   
-            } else {
-                $response = ["message" =>'Username or password does not exist'];
-                $response['status'] = 0;
-                return response($response, 401);
-            }
+        if ($students) {
+            $token = $students->createToken('Laravel Password Grant Client')->accessToken;
+            return response()->json(
+                [
+                    'token' => $token,
+                    'student_id' => $students->student_id,
+                    'first_name' => $students->first_name,
+                    'last_name' => $students->surname,
+                    'status' => 200,
+                    'message' => 'User Logged In Successfully'
+                ]
+            );
+        } else {
+            $response = ["message" => 'Username or Password does not exist'];
+            $response['status'] = 0;
+            return response($response, 401);
+        }
     }
-    
 }

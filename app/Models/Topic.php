@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-class Topic extends Model
+use CyrildeWit\EloquentViewable\Viewable;
+class Topic extends Model 
 {
+
+
     protected $fillable =[
         'topic_id',
         'topic_name',

@@ -15,14 +15,13 @@ class TopicCategoryController extends Controller
 {
     public function viewTopicCategory()
     {
-        $topicCategory = TopicCategory::all();
+        // $topicCategory = TopicCategory::all();
 
         $topicCategory = DB::select("SELECT
         tbl_topic_category.topic_category_name, 
         tbl_school.school_name,
         tbl_topic_category.topic_category_id
     
-     
     FROM
   
     tbl_topic_category
@@ -107,5 +106,47 @@ class TopicCategoryController extends Controller
             return response()->json('message',$exception->getMessage());
           }
     }
+
+    public function getTopicCategory(Request $request){
+        $topic_category_id = $request['topic_category_id'];
+
+        $category = DB::select("SELECT
+        tbl_topic.topic_name,
+        tbl_topic.topic_id,
+        tbl_topic.topic_category_id,
+        tbl_topic.description,
+        tbl_topic.image,
+        tbl_topic.is_active,
+        tbl_topic.date_posted,
+        tbl_topic_category.topic_category_name,
+        tbl_topic_category.school_id 
+    FROM
+        tbl_topic
+        INNER JOIN tbl_topic_category ON tbl_topic.topic_category_id = tbl_topic_category.topic_category_id 
+    WHERE
+        tbl_topic_category.topic_category_id =  $topic_category_id");
+
+    return response()->json($category);
+    }
+
+public function CategoryHome(){
+    $topicCategory = DB::select("SELECT
+    tbl_topic_category.topic_category_name, 
+    tbl_school.school_name,
+    tbl_topic_category.topic_category_id
+
+FROM
+
+tbl_topic_category
+   
+    INNER JOIN
+    tbl_school
+    ON 
+    tbl_topic_category.school_id = tbl_school.school_id");
+    
+
+    return response()->json($topicCategory,200);
+
+}
    
 }
